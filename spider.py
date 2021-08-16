@@ -24,6 +24,9 @@ try:
         except:
             nothing = ""
         soup = BeautifulSoup(url, 'html.parser')
+        for result in soup.find_all(find):
+            if result not in results:
+                results.append(result)
         for link in soup.find_all('a'):
             if link.get('herf') not in links:
                 if link.get('href').startswith('/') and link.get('href').startswith('/') not in links:
@@ -33,9 +36,6 @@ try:
                     links.append(str(link.get('href')))
                     url = link.get('href')
                     part = ""
-                for result in soup.find_all(find):
-                    if result not in results:
-                        results.append(result)
                 spider(find, url, part)
     spider(find, url, part)
     output += f"{'-'*10}\nLinks:\n"
