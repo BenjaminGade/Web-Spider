@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
-import requests, argparse
+import argparse, threading, time
 parse = argparse.ArgumentParser()
 parse.add_argument('-u', '--url', required=True)
 parse.add_argument('-f', '--find', default='', required=False)
@@ -13,31 +13,42 @@ url = args.url
 find = args.find
 links = []
 results = []
+links.append(url)
+print('''********************
+This Program Is Buggy.
+To Make Sure That It\'s Completely Finished Crawling Then Give It A Moment After It Said It\'s Finished.
+Also, The Find Tag Feature Might Not Work In Some Cases.
+********************''')
+time.sleep(5)
 try:
-    print('-'*10,'\nHTTP GET Response Codes:')
-    def spider(find, url, part):
-        url = args.url + part
-        r = requests.get(url)
-        print(f"{url}: {r}")
+    def spider( url, part):
+        global links
+        global results
+        global find
         try:
             url = urlopen(url)
+            soup = BeautifulSoup(url, 'html.parser')
+            for result in soup.find_all(find):
+                if result not in results:
+                    results.append(result)
+            for link in soup.find_all('a'):
+                try:
+                    if link.get('href') not in links:
+                        if link.get('href').startswith('/') and link.get('href').startswith('/') not in links:
+                            links.append(str(args.url + link.get('href')))
+                            part = str(link.get('href'))
+                        elif link.get('href').startswith('http') and link.get('href').startswith('http') not in links:
+                            print(link.get('href'))
+                            links.append(str(link.get('href')))
+                            url = link.get('href')
+                            part = ""
+                        threading.Thread(target=spider, args=(url, part)).start()
+                except:
+                    continue
         except:
-            nothing = ""
-        soup = BeautifulSoup(url, 'html.parser')
-        for result in soup.find_all(find):
-            if result not in results:
-                results.append(result)
-        for link in soup.find_all('a'):
-            if link.get('herf') not in links:
-                if link.get('href').startswith('/') and link.get('href').startswith('/') not in links:
-                    links.append(str(args.url + link.get('href')))
-                    part = str(link.get('href'))
-                elif link.get('href').startswith('http') and link.get('href').startswith('http') not in links:
-                    links.append(str(link.get('href')))
-                    url = link.get('href')
-                    part = ""
-                spider(find, url, part)
-    spider(find, url, part)
+            pass
+    print(url)
+    spider( url, part)
     output += f"{'-'*10}\nLinks:\n"
     for link in links:
         output += f"{link}\n"
@@ -51,7 +62,10 @@ try:
     if args.output:
         with open(args.output, 'a') as file:
             file.write(output)
+            file.close()
     print(output)
+    print("Ctrl + C To Exit")
+    exit()
 except KeyboardInterrupt:
     output += f"{'-'*10}\nLinks:\n"
     for link in links:
@@ -66,4 +80,7 @@ except KeyboardInterrupt:
     if args.output:
         with open(args.output, 'a') as file:
             file.write(output)
+            file.close()
     print(output)
+    print("Ctrl + C To Exit")
+    exit()
