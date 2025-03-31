@@ -25,9 +25,7 @@ Also, The Find Tag Feature Might Not Work In Some Cases.
 # Ignore unessesary wait time
 # time.sleep(5)
 
-def spider(url, part=""):
-    global links, results, output
-    
+def spider(url, part=""):    
     try:
         with urlopen(url) as response:
             soup = BeautifulSoup(response, 'html.parser')
