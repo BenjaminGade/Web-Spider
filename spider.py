@@ -6,9 +6,9 @@ import time
 
 # Argument parsing
 parser = argparse.ArgumentParser()
-parser.add_argument('-u', '--url', required=True)
-parser.add_argument('-f', '--find', default='', required=False)
-parser.add_argument('-o', '--output', required=False)
+parser.add_argument('-u', '--url', help='URL to start crawling, must include the http:// or https://', required=True)
+parser.add_argument('-f', '--find', help='HTML tag to search for and save in the results', default='', required=False)
+parser.add_argument('-o', '--output', help='File to save the output to', required=False)
 args = parser.parse_args()
 
 # Global variables
