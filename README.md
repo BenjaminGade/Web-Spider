@@ -3,7 +3,7 @@
 
 This is a simple implementation of a web spider, written in python.
 
-When given a URL then it will fetch the webpage and look for links (<a> tags) which it will then save in an array, before scanning that page aswell. 
+When given a URL then it will fetch the webpage and look for links (a tags) which it will then save in an array, before scanning that page aswell. 
 
 
 ## Features
